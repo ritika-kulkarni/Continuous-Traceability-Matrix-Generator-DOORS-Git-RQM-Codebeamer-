@@ -8,6 +8,16 @@ Renders a `TraceabilityMatrix` to audit artifacts.
 | `pdf_exporter.py` | `PdfExporter` | PDF via WeasyPrint (optional extra) |
 | `templates/matrix.html.j2` | — | Default print-friendly layout |
 
+## Pipeline
+
+```mermaid
+flowchart LR
+  M[TraceabilityMatrix] --> H[HtmlExporter]
+  H --> HTML[*.html]
+  H --> P[PdfExporter]
+  P --> PDF[*.pdf]
+```
+
 ## Usage
 
 ```python
@@ -26,4 +36,5 @@ PdfExporter().write(matrix, "artifacts/matrix.pdf")  # needs pip install -e ".[p
 ## Related docs
 
 - [CLI `generate-matrix`](../../../docs/cli.md)
+- [Deployment](../../../docs/deployment.md)
 - [Troubleshooting PDF](../../../docs/troubleshooting.md)

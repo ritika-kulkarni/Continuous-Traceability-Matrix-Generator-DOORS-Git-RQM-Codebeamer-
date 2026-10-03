@@ -10,6 +10,19 @@ Concrete REST clients that implement ports defined in `traceability.ports`.
 | `rqm.py` | `RqmAdapter` | IBM RQM / ETM |
 | `http_base.py` | `HttpAdapterBase` | Shared httpx + retries |
 
+## Position in the architecture
+
+```mermaid
+flowchart LR
+  SVC[Services] --> P[Ports]
+  P --> DA[DoorsAdapter]
+  P --> CA[CodebeamerAdapter]
+  P --> GA[GitAdapter]
+  P --> RA[RqmAdapter]
+  DA & CA & GA & RA --> HTTP[HttpAdapterBase]
+  HTTP --> RET[with_retries]
+```
+
 ## Responsibilities
 
 - Authenticate and call vendor APIs  

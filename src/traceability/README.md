@@ -28,14 +28,37 @@ traceability/
 └── cli.py
 ```
 
+## Layering
+
+```mermaid
+flowchart TB
+  CLI[cli / api] --> CTR[container]
+  CTR --> SVC[services]
+  SVC --> PORTS[ports]
+  AD[adapters] --> PORTS
+  SVC --> DOM[domain]
+  AD --> DOM
+  CTR --> EXP[exporters]
+```
+
 ## Design rule
 
 Depend **inward**: `api` / `cli` → `services` → `ports` ← `adapters`.  
 Never import adapters from `domain`.
 
+## Subpackage READMEs
+
+- [domain/](domain/README.md)
+- [adapters/](adapters/README.md)
+- [services/](services/README.md)
+- [api/](api/README.md)
+- [exporters/](exporters/README.md)
+- [resilience/](resilience/README.md)
+
 ## Docs
 
 - [Architecture](../../docs/architecture.md)
+- [Data model](../../docs/data-model.md)
 - [Getting started](../../docs/getting-started.md)
 - [API](../../docs/api.md)
 - [CLI](../../docs/cli.md)

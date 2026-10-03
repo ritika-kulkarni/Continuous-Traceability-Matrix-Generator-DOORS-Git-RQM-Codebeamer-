@@ -16,6 +16,19 @@ Pure, I/O-free models and requirement-tag rules. This layer has **no** HTTP, fil
 
 Enums use `StrEnum`: `ArtifactSource`, `LinkType`, `VerificationLevel`, `ExecutionStatus`.
 
+## Relationships
+
+```mermaid
+flowchart TB
+  Tag[Requirement.tag] --> Req[Requirement]
+  Tag --> Code[CodeItem.requirement_tags]
+  Tag --> Commit[GitCommit.requirement_tags]
+  Tag --> Case[RqmTestCase.requirement_tags]
+  Case --> Exec[RqmExecution]
+  Req & Code & Commit & Case --> Link[TraceLink]
+  Req --> Row[TraceRow]
+```
+
 ## Rules
 
 - Prefer `frozen=True` models  
@@ -24,5 +37,6 @@ Enums use `StrEnum`: `ArtifactSource`, `LinkType`, `VerificationLevel`, `Executi
 
 ## Related docs
 
+- [Data model](../../../docs/data-model.md)
 - [Requirement tags](../../../docs/requirement-tags.md)
 - [Architecture](../../../docs/architecture.md)
