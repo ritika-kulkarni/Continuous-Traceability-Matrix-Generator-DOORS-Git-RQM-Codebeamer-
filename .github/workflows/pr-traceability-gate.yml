@@ -1,0 +1,32 @@
+name: pr-traceability-gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  validate-requirement-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+      - name: Validate PR requirement tags + RQM coverage
+        env:
+          DOORS_PASSWORD: ${{ secrets.DOORS_PASSWORD }}
+          CODEBEAMER_TOKEN: ${{ secrets.CODEBEAMER_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          RQM_PASSWORD: ${{ secrets.RQM_PASSWORD }}
+          TRACEABILITY__DOORS__BASE_URL: ${{ vars.DOORS_BASE_URL }}
+          TRACEABILITY__DOORS__USERNAME: ${{ vars.DOORS_USERNAME }}
+          TRACEABILITY__CODEBEAMER__BASE_URL: ${{ vars.CODEBEAMER_BASE_URL }}
+          TRACEABILITY__GIT__OWNER: ${{ github.repository_owner }}
+          TRACEABILITY__GIT__REPO: ${{ github.event.repository.name }}
+          TRACEABILITY__RQM__BASE_URL: ${{ vars.RQM_BASE_URL }}
+          TRACEABILITY__RQM__USERNAME: ${{ vars.RQM_USERNAME }}
+        run: traceability --config config/default.yaml validate-pr ${{ github.event.pull_request.number }}

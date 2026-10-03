@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ matrix.title }}</title>
+  <style>
+    :root {
+      --ink: #12263a;
+      --muted: #5b6b7c;
+      --line: #d7dee7;
+      --ok: #1b7f4c;
+      --gap: #b42318;
+      --bg: #f7f9fc;
+      --card: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eef3f8 0%, var(--bg) 240px);
+      margin: 0;
+      padding: 32px;
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: -0.02em; }
+    .meta { color: var(--muted); margin-bottom: 24px; font-size: 14px; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat .label { font-size: 12px; color: var(--muted); text-transform: uppercase; }
+    .stat .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+    th {
+      background: #edf2f7;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    tr:last-child td { border-bottom: none; }
+    .ok { color: var(--ok); font-weight: 600; }
+    .gap { color: var(--gap); font-weight: 600; }
+    .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; font-size: 12px; }
+    .section { margin-top: 28px; }
+    ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+    @media print {
+      body { background: white; padding: 12px; }
+      .stat { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ matrix.title }}</h1>
+  <div class="meta">
+    Generated {{ matrix.generated_at.isoformat() }}
+    {% if matrix.build_id %} · Build {{ matrix.build_id }}{% endif %}
+  </div>
+
+  <div class="summary">
+    <div class="stat"><div class="label">Requirements</div><div class="value">{{ matrix.summary.get('requirements_total', 0) }}</div></div>
+    <div class="stat"><div class="label">Complete</div><div class="value">{{ matrix.summary.get('rows_complete', 0) }}</div></div>
+    <div class="stat"><div class="label">With Gaps</div><div class="value">{{ matrix.summary.get('rows_with_gaps', 0) }}</div></div>
+    <div class="stat"><div class="label">Links</div><div class="value">{{ matrix.summary.get('links', 0) }}</div></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Requirement</th>
+        <th>Title</th>
+        <th>Codebeamer</th>
+        <th>Git Commits</th>
+        <th>RQM Tests</th>
+        <th>Execution</th>
+        <th>Coverage</th>
+        <th>Gaps</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in matrix.rows %}
+      <tr>
+        <td class="mono">{{ row.requirement_tag }}</td>
+        <td>{{ row.requirement_title }}</td>
+        <td class="mono">{{ row.codebeamer_ids|join(', ') or '—' }}</td>
+        <td class="mono">{{ row.commit_shas|join(', ') or '—' }}</td>
+        <td class="mono">{{ row.test_case_ids|join(', ') or '—' }}</td>
+        <td>{{ row.latest_execution_status.value if row.latest_execution_status else '—' }}</td>
+        <td class="{{ 'ok' if row.coverage_complete else 'gap' }}">
+          {{ 'COMPLETE' if row.coverage_complete else 'INCOMPLETE' }}
+        </td>
+        <td>{{ row.gaps|join(', ') or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if matrix.orphan_requirements %}
+  <div class="section">
+    <h2>Orphan / Incomplete Requirements</h2>
+    <ul>
+      {% for tag in matrix.orphan_requirements %}
+      <li class="mono">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if matrix.orphan_tests %}
+  <div class="section">
+    <h2>Orphan Tests (no requirement link)</h2>
+    <ul>
+      {% for tid in matrix.orphan_tests %}
+      <li class="mono">{{ tid }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</body>
+</html>

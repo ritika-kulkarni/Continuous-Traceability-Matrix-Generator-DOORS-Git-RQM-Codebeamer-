@@ -1,0 +1,52 @@
+# Continuous Traceability Matrix Generator — default configuration
+# Override via TRACEABILITY__* env vars or a project-specific YAML.
+
+app:
+  name: "ASPICE Traceability Matrix Generator"
+  environment: local
+  log_level: INFO
+  req_tag_pattern: "REQ_[A-Z0-9]+(?:_[A-Z0-9]+)*_\\d{3,}"
+
+doors:
+  base_url: "https://doors.example.com/dwa/api"
+  username: ""
+  password: ""  # prefer DOORS_PASSWORD env
+  module_path: "/Project/Requirements"
+  timeout_seconds: 30
+  max_retries: 3
+
+codebeamer:
+  base_url: "https://codebeamer.example.com/cb/rest"
+  token: ""  # prefer CODEBEAMER_TOKEN env
+  project_id: 1000
+  timeout_seconds: 30
+  max_retries: 3
+
+git:
+  # GitHub / GitLab / Azure DevOps compatible REST base for PR/commit metadata
+  provider: github  # github | gitlab | azure
+  base_url: "https://api.github.com"
+  token: ""  # prefer GIT_TOKEN env
+  owner: "org"
+  repo: "ecu-firmware"
+  timeout_seconds: 30
+  max_retries: 3
+
+rqm:
+  base_url: "https://rqm.example.com/qm/service/com.ibm.rqm.integration.service.IMainService"
+  username: ""
+  password: ""  # prefer RQM_PASSWORD env
+  project_area: "ADAS_Validation"
+  timeout_seconds: 45
+  max_retries: 3
+
+matrix:
+  output_dir: "artifacts"
+  title: "ASPICE Bidirectional Traceability Matrix"
+  include_orphan_requirements: true
+  include_orphan_tests: true
+  html_template: "matrix.html.j2"
+
+sync:
+  batch_size: 100
+  fail_fast: false
