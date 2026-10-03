@@ -9,6 +9,15 @@ FastAPI surface for the synchronization service.
 
 ## Endpoints
 
+```mermaid
+flowchart LR
+  H[GET /health] --> App
+  S[POST /api/v1/sync] --> App
+  P[POST /api/v1/pr/validate] --> App
+  M[POST /api/v1/matrix/generate] --> App
+  App[FastAPI app] --> Services
+```
+
 - `GET /health`
 - `POST /api/v1/sync`
 - `POST /api/v1/pr/validate`

@@ -14,6 +14,26 @@ Manual ASPICE traceability spreadsheets before audits waste engineering time and
 2. **Gates pull requests** on compliant requirement tags (e.g. `REQ_ADAS_USS_042`) and linked unit/integration tests in RQM  
 3. **Generates** an end-to-end ASPICE matrix artifact (HTML/PDF) during nightly builds  
 
+## Architecture at a glance
+
+```mermaid
+flowchart LR
+  DOORS[(IBM DOORS)] --> Sync[Sync service]
+  CB[(Codebeamer)] --> Sync
+  Git[(Git)] --> Sync
+  RQM[(RQM)] --> Sync
+  Sync --> Store[(Traceability store)]
+  Store --> Matrix[HTML / PDF matrix]
+  Git --> Gate[PR gate]
+  DOORS --> Gate
+  RQM --> Gate
+  Gate --> CI{Compliant?}
+  CI -->|yes| Merge[Merge]
+  CI -->|no| Block[Block PR]
+```
+
+Hexagonal layout (ports & adapters), sequence diagrams, and coverage flow: **[docs/architecture.md](docs/architecture.md)**.
+
 ---
 
 ## Documentation
@@ -21,8 +41,11 @@ Manual ASPICE traceability spreadsheets before audits waste engineering time and
 | Guide | Description |
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |
+| [Overview](docs/overview.md) | Problem, personas, success metrics |
 | [Getting started](docs/getting-started.md) | Install, configure, first sync |
-| [Architecture](docs/architecture.md) | Hexagonal design, modules, data flow |
+| [Architecture](docs/architecture.md) | Diagrams, layers, sequences |
+| [Data model](docs/data-model.md) | Domain entities and links |
+| [Deployment](docs/deployment.md) | CI-only vs API service ops |
 | [Configuration](docs/configuration.md) | YAML + environment variables |
 | [CLI reference](docs/cli.md) | `sync`, `validate-pr`, `generate-matrix`, `serve` |
 | [REST API](docs/api.md) | Endpoints, payloads, status codes |

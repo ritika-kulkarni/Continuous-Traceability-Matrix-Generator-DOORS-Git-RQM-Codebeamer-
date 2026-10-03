@@ -13,6 +13,14 @@ tests/
 └── integration/      # respx HTTP + FastAPI workflow tests
 ```
 
+## Test pyramid
+
+```mermaid
+flowchart TB
+  U[Unit tests<br/>fakes, pure logic] --> I[Integration tests<br/>respx + TestClient]
+  I --> CI[CI workflow<br/>ruff + pytest --cov]
+```
+
 ## Run
 
 ```bash
@@ -37,6 +45,11 @@ pytest --cov=traceability --cov-report=term-missing
 ## Fakes
 
 `tests/fakes.py` implements the same async methods as production ports so services can be tested without network I/O. `FailingDoors` simulates an unavailable ALM for fail-soft sync tests.
+
+## Subfolder READMEs
+
+- [unit/](unit/README.md)
+- [integration/](integration/README.md)
 
 ## Docs
 

@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Detailed architecture docs with Mermaid diagrams (context, hexagonal, sequences, coverage)  
+- Product overview, data-model, and deployment guides  
+- Expanded package READMEs with layer diagrams  
+
 ## [1.0.0] — 2026-10-03
 
 ### Added
@@ -18,4 +26,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit + integration test suite with fakes and `respx`  
 - Documentation set under `docs/` and package-level READMEs  
 
-[1.0.0]: https://github.com/example/traceability-matrix/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ritika-kulkarni/Continuous-Traceability-Matrix-Generator-DOORS-Git-RQM-Codebeamer-/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/ritika-kulkarni/Continuous-Traceability-Matrix-Generator-DOORS-Git-RQM-Codebeamer-/releases/tag/v1.0.0
